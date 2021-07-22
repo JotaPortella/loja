@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pedido {
 
@@ -21,18 +23,9 @@ public class Pedido {
 	@ManyToOne
 	private Cliente cliente;
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<ItemPedido> itens = new ArrayList<>();
 	private BigDecimal valorTotal = BigDecimal.ZERO;
-
-	public Pedido() {
-	}
-
-	public Pedido(Long id, Cliente cliente, List<ItemPedido> itens, BigDecimal valorTotal) {
-		this.id = id;
-		this.cliente = cliente;
-		this.itens = itens;
-		this.valorTotal = valorTotal;
-	}
 
 	public Long getId() {
 		return id;

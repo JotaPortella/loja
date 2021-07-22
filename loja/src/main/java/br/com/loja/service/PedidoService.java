@@ -27,6 +27,12 @@ public class PedidoService {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
+
+	public void enviarPedido(Pedido pedido) {
+		entregaRepository.save(new Entrega(pedido.getCliente(), pedido));
+	}
 
 	public void cadastrarPedido(PedidoDto pedidoDto) {
 		Optional<Cliente> clienteOptional = clienteRepository.findById(pedidoDto.getClienteId());
@@ -40,11 +46,7 @@ public class PedidoService {
 				pedido.adicionar(new ItemPedido(pedidoDto.getQuantidade().get(i), pedido, produto));
 			}
 			pedidoRepository.save(pedido);
-			enviarPedido(pedido);
+			rabbitMQSender.send(pedido);
 		}
-	}
-	
-	public void enviarPedido(Pedido pedido) {
-		entregaRepository.save(new Entrega(pedido.getCliente(), pedido));			
 	}
 }

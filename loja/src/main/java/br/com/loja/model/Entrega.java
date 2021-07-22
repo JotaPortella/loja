@@ -18,12 +18,13 @@ public class Entrega {
 	@OneToOne
 	private Pedido pedido;
 
+	public Entrega() {
+
+	}
+
 	public Entrega(Cliente cliente, Pedido pedido) {
 		this.cliente = cliente;
 		this.pedido = pedido;
-	}
-
-	public Entrega() {
 	}
 
 	public Long getId() {

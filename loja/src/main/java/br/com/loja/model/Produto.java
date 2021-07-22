@@ -19,17 +19,6 @@ public class Produto {
 	@NotNull
 	private BigDecimal valor;
 
-	public Produto() {
-
-	}
-
-	public Produto(Long id, String nome, BigDecimal valor) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.valor = valor;
-	}
-
 	public Long getId() {
 		return id;
 	}

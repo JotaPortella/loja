@@ -5,8 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import br.com.loja.dto.ClienteDto;
-
 @Entity
 public class Cliente {
 
@@ -83,18 +81,6 @@ public class Cliente {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
-	}
-
-	public static Cliente of(ClienteDto clienteDto) {
-		Cliente cliente = new Cliente();
-		cliente.setNome(clienteDto.getNome());
-		cliente.setCpf(clienteDto.getCpf());
-		cliente.setEndereco(clienteDto.getEndereco());
-		cliente.setBairro(clienteDto.getBairro());
-		cliente.setCep(cliente.getCep());
-		cliente.setCidade(clienteDto.getCidade());
-		cliente.setEstado(clienteDto.getEstado());
-		return cliente;
 	}
 
 }

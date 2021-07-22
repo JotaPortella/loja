@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "javainuse.rabbitmq.queue",
+    "type": "java.lang.String",
+    "description": "A description for 'javainuse.rabbitmq.queue'"
+  },
+  {
+    "name": "spring.jpa.hibernate.hbm2ddl.auto",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.hibernate.hbm2ddl.auto'"
+  },
+  {
+    "name": "javainuse.rabbitmq.exchange",
+    "type": "java.lang.String",
+    "description": "A description for 'javainuse.rabbitmq.exchange'"
+  },
+  {
+    "name": "javainuse.rabbitmq.routingkey",
+    "type": "java.lang.String",
+    "description": "A description for 'javainuse.rabbitmq.routingkey'"
+  }
+]}

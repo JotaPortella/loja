@@ -1,9 +1,9 @@
 package br.com.loja.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import br.com.loja.model.Pedido;
 
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+public interface PedidoRepository extends CrudRepository<Pedido, Long> {
 
 }
