@@ -25,9 +25,9 @@ public class ItemPedido {
 
 	}
 
-	public ItemPedido(Integer quantidade, Pedido pedido, Produto produto) {
-		this.valor = produto.getValor();
+	public ItemPedido(Pedido pedido, Produto produto, Integer quantidade) {
 		this.quantidade = quantidade;
+		this.valor = produto.getValor();
 		this.pedido = pedido;
 		this.produto = produto;
 	}

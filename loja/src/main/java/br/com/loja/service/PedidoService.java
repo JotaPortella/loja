@@ -1,6 +1,6 @@
 package br.com.loja.service;
 
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import br.com.loja.model.Cliente;
 import br.com.loja.model.Entrega;
 import br.com.loja.model.ItemPedido;
 import br.com.loja.model.Pedido;
-import br.com.loja.model.Produto;
 import br.com.loja.repository.ClienteRepository;
 import br.com.loja.repository.EntregaRepository;
 import br.com.loja.repository.PedidoRepository;
@@ -18,7 +17,6 @@ import br.com.loja.repository.ProdutoRepository;
 
 @Service
 public class PedidoService {
-
 	@Autowired
 	private ClienteRepository clienteRepository;
 	@Autowired
@@ -35,18 +33,21 @@ public class PedidoService {
 	}
 
 	public void cadastrarPedido(PedidoDto pedidoDto) {
-		Optional<Cliente> clienteOptional = clienteRepository.findById(pedidoDto.getClienteId());
+		Cliente cliente = clienteRepository.findById(pedidoDto.getClienteId())
+				.orElseThrow(EntityNotFoundException::new);
 
-		if (clienteOptional.isPresent()) {
-			Pedido pedido = new Pedido();
-			pedido.setCliente(clienteOptional.get());
+		Pedido pedido = new Pedido();
+		pedido.setCliente(cliente);
 
-			for (int i = 0; i < pedidoDto.getProdutos().size(); i++) {
-				Produto produto = produtoRepository.findById(pedidoDto.getProdutos().get(i)).get();
-				pedido.adicionar(new ItemPedido(pedidoDto.getQuantidade().get(i), pedido, produto));
-			}
-			pedidoRepository.save(pedido);
-			rabbitMQSender.send(pedido);
-		}
+		pedidoDto.getItens().stream()
+				.forEach(item -> adicionarItemPedido(pedido, item.getProdutoId(), item.getQuantidade()));
+
+		pedidoRepository.save(pedido);
+		rabbitMQSender.send(pedido);
 	}
+
+	public void adicionarItemPedido(Pedido pedido, Long produtoId, Integer quantidade) {
+		pedido.adicionar(new ItemPedido(pedido, produtoRepository.findById(produtoId).get(), quantidade));
+	}
+
 }
