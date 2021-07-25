@@ -10,6 +10,7 @@ import br.com.loja.model.Cliente;
 import br.com.loja.model.Entrega;
 import br.com.loja.model.ItemPedido;
 import br.com.loja.model.Pedido;
+import br.com.loja.model.Produto;
 import br.com.loja.repository.ClienteRepository;
 import br.com.loja.repository.EntregaRepository;
 import br.com.loja.repository.PedidoRepository;
@@ -32,7 +33,7 @@ public class PedidoService {
 		entregaRepository.save(new Entrega(pedido.getCliente(), pedido));
 	}
 
-	public void cadastrarPedido(PedidoDto pedidoDto) {
+	public void cadastrarPedido(PedidoDto pedidoDto) throws EntityNotFoundException {
 		Cliente cliente = clienteRepository.findById(pedidoDto.getClienteId())
 				.orElseThrow(EntityNotFoundException::new);
 
@@ -46,8 +47,9 @@ public class PedidoService {
 		rabbitMQSender.send(pedido);
 	}
 
-	public void adicionarItemPedido(Pedido pedido, Long produtoId, Integer quantidade) {
-		pedido.adicionar(new ItemPedido(pedido, produtoRepository.findById(produtoId).get(), quantidade));
+	public void adicionarItemPedido(Pedido pedido, Long produtoId, Integer quantidade) throws EntityNotFoundException {
+		Produto produto = produtoRepository.findById(produtoId).orElseThrow(EntityNotFoundException::new);
+		pedido.adicionar(new ItemPedido(pedido, produto, quantidade));
 	}
 
 }

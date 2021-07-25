@@ -60,6 +60,9 @@ public class Pedido {
 	}
 
 	public void adicionar(ItemPedido item) {
+		if (item.getQuantidade() < 1) {
+			throw new IllegalArgumentException("Quantidade deve ser positiva e diferente de 0 (zero)");
+		}
 		this.itens.add(item);
 		this.valorTotal = this.valorTotal.add(item.getValorTotal());
 	}

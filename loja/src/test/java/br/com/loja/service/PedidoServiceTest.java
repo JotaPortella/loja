@@ -1,6 +1,7 @@
 package br.com.loja.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -70,12 +71,28 @@ public class PedidoServiceTest {
 
 	@Test
 	public void cadastrarPedido_deveLancarEntityNotFoundException_quandoClienteInvalido() {
-		try {
-			service.cadastrarPedido(new PedidoDto());
-		} catch (EntityNotFoundException e) {
+		assertThrows(EntityNotFoundException.class, () -> service.cadastrarPedido(new PedidoDto()));
+	}
 
-		}
+	@Test
+	public void adicionarItemPedido_deveLancarEntityNotFoundException_quandoProdutoInvalido() {
+		Produto produto = new Produto();
+		produto.setId((long) 9999);
+		assertThrows(EntityNotFoundException.class, () -> service.adicionarItemPedido(umPedido(), produto.getId(), 1));
+	}
 
+	@Test
+	public void dicionarItemPedido_deveLancarEntityNotFoundException_quandoQuantidadeForZero() {
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.of(umCliente()));
+		when(produtoRepository.findById(anyLong())).thenReturn(Optional.of(umProduto()));
+		assertThrows(IllegalArgumentException.class, () -> service.adicionarItemPedido(umPedido(), id, 0));
+	}
+
+	@Test
+	public void dicionarItemPedido_deveLancarEntityNotFoundException_quandoQuantidadeNegativa() {
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.of(umCliente()));
+		when(produtoRepository.findById(anyLong())).thenReturn(Optional.of(umProduto()));
+		assertThrows(IllegalArgumentException.class, () -> service.adicionarItemPedido(umPedido(), id, -1));
 	}
 
 	@Test
